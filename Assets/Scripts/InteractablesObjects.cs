@@ -1,4 +1,5 @@
                               using UnityEngine;
+using UnityEngine.SceneManagement;
 
 public class InteractablesObjects : MonoBehaviour
 {
@@ -30,6 +31,8 @@ public class InteractablesObjects : MonoBehaviour
     AudioSource audioSource;
     PlayerActions playerActions; 
 
+    bool gameOver = false;
+
     void Start()
     {
         audioSource = GetComponent<AudioSource>();
@@ -41,8 +44,20 @@ public class InteractablesObjects : MonoBehaviour
     {
         if (delay > 0)
             delay -= Time.deltaTime;
+
+        if(moodManager.GetCurrentHumor() <= 0 || moodManager.GetCurrentSanidade() <= 0 && !gameOver)
+        {
+            gameOver = true;
+            messageCanvas.SetActive(true);
+            tmpMessage.text = "O tédio venceu...";
+            Invoke("ResetTheGame", 3f);
+        }
     }
 
+    public void ResetTheGame()
+    {
+        SceneManager.LoadScene(SceneManager.GetActiveScene().name);
+    }
     public void GainHumorAndSanity()
     {
         if (delay > 0)

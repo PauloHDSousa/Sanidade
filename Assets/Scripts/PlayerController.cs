@@ -20,11 +20,12 @@ public class PlayerController : MonoBehaviour
     Rigidbody2D rb;
     SpriteRenderer sr;
     Vector2 movement;
-
-
+    PlayerAnimatorController playerAnimatorController;
+    int lastMovement = 0;
 
     void Start()
     {
+        playerAnimatorController = GetComponent<PlayerAnimatorController>();
         rb = GetComponent<Rigidbody2D>();
         sr = GetComponent<SpriteRenderer>();
     }
@@ -33,6 +34,47 @@ public class PlayerController : MonoBehaviour
     {
         movement.x = Input.GetAxisRaw("Horizontal");
         movement.y = Input.GetAxisRaw("Vertical");
+
+        if (movement.x == 0 && movement.y == 0) { 
+
+            int move  = 5;
+            if(lastMovement == 1)
+                move = 5;
+            else if (lastMovement == 2)
+                move = 6;
+            else if (lastMovement == 3)
+                move = 7;
+            else if (lastMovement == 4)
+                move = 8;
+
+            playerAnimatorController.SetWalkAnimation(move);
+        }
+        else if (movement.x != 0)
+        {
+            if (movement.x == 1)
+            {
+                lastMovement = 4;
+                playerAnimatorController.SetWalkAnimation(4);
+            }
+            else if (movement.x == -1)
+            {
+                lastMovement = 3;
+                playerAnimatorController.SetWalkAnimation(3);
+            }
+        }
+        else if (movement.y != 0)
+        {
+            if (movement.y == 1)
+            {
+                lastMovement = 1;
+                playerAnimatorController.SetWalkAnimation(1);
+            }
+            else if (movement.y == -1)
+            {
+                lastMovement = 2;
+                playerAnimatorController.SetWalkAnimation(2);
+            }
+        }
     }
 
     private void OnDrawGizmos()
@@ -45,16 +87,7 @@ public class PlayerController : MonoBehaviour
     private void FixedUpdate()
     {
         rb.MovePosition(rb.position + movement * speed * Time.fixedDeltaTime);
-
-        FlipImage();
         UpdateImage();
-    }
-    void FlipImage()
-    {
-        if (movement.x > 0) 
-            sr.flipX = false;
-        else if (movement.x < 0)
-            sr.flipX = true;
     }
 
     void UpdateImage()

@@ -81,4 +81,13 @@ public class MoodManager : MonoBehaviour
         else if ((currentHumor <= 25 || currentSanidade <= 25) && audioSource.pitch == 1.2)
             audioSource.pitch = 1.3f;
     }
+
+    public float GetCurrentSanidade()
+    {
+        return currentSanidade;
+    }
+    public float GetCurrentHumor()
+    {
+        return currentHumor;
+    }
 }
